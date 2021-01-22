@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+  <style>
+    .full {
+      height: 100vh;
+      align-items: center;
+    }
+  </style>
+
+  <title>Javascript</title>
+</head>
+
+<body>
+
+  <div class="container justify-content-center">
+    <a href="chucknorris.html" class="btn btn-primary mt-3 mb-3">Chuck Norris API</a>
+  </div>
+
+  <div id="app"></div>
+  <div id="root"></div>
+
+  <!-- Option 1: Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+    crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.js"></script>
+
+  <script>
+    const app = document.querySelector('#app');
+
+    const formCadastro = `
+      <div class="container">
+        <div class="card mt-5">
+          <div class="card-body">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nome</label>
+              <input type="text" class="form-control" id="name">
+            </div>
+            <div class="mb-3">
+              <label for="age" class="form-label">Idade</label>
+              <input type="text" class="form-control" id="age">
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">E-mail</label>
+              <input type="text" class="form-control" id="email">
+            </div>
+            <div class="mb-3">
+              <label for="profession" class="form-label">Profissão</label>
+              <input type="text" class="form-control" id="profession">
+            </div>
+            <div class="mb-3">
+              <label for="address" class="form-label">Endereço</label>
+              <input type="text" class="form-control" id="address">
+            </div>
+            <div class="mb-3">
+              <label for="state" class="form-label">Estado</label>
+              <input type="text" class="form-control" id="state">
+            </div>
+            <div class="mb-3">
+              <label for="province" class="form-label">Município</label>
+              <input type="text" class="form-control" id="province">
+            </div>
+          </div>
+        </div>
+        <button onClick="showCard()" class="btn btn-primary mt-3 mb-3">Cadastrar</button>
+      </div>
+    `;
+    app.innerHTML = formCadastro;
+
+
+
+    function showCard() {
+
+      let rootApp = document.querySelector('#root');
+
+      rootApp.innerHTML = '';
+
+      const userName = document.querySelector('#name').value;
+      const userAge = document.querySelector('#age').value;
+      const userEmail = document.querySelector('#email').value;
+      const userProfession = document.querySelector('#profession').value;
+      const userAddress = document.querySelector('#address').value;
+      const userState = document.querySelector('#state').value;
+      const userProvince = document.querySelector('#province').value;
+
+
+      const loading = `
+        <div class="d-flex justify-content-center full">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      `;
+
+      rootApp.innerHTML = loading;
+
+      const baseUrl = 'https://webhook.site/5520202e-6149-4a1b-ab4a-5759ad920ba8';
+
+      const body = {
+        name: userName,
+        age: userAge,
+        email: userEmail,
+        profession: userProfession,
+        address: userAddress,
+        state: userState,
+        province: userProvince,
+      };
+
+      axios.post( baseUrl, body ).then(
+        res => {
+          console.log( 'retorno de dados', res.data );
+          console.log( 'retorno de status', res.status );
+
+          let firstName = userName.split(' ');
+
+          console.log(firstName)
+
+          const cardCadastro = `
+            <div class="container">
+              <div class="card mt-5">
+                <div class="card-body">
+                  <p><b>Cadastro realizado com ${res.data.return}</b></p>
+                  <br>
+                  <p><b>Nome:</b> ${firstName[0]}</p>
+                  <p><b>Idade:</b> ${userAge}</p>
+                  <p><b>E-mail:</b> ${userEmail}</p>
+                  <p><b>Profissão:</b> ${userProfession}</p>
+                  <p><b>Endereço:</b> ${userAddress}</p>
+                  <p><b>Estado:</b> ${userState}</p>
+                  <p><b>Município:</b> ${userProvince}</p>
+                </div>
+              </div>
+            </div>
+          `;
+
+          rootApp.innerHTML = cardCadastro;
+        }
+      );
+
+    }
+
+  </script>
+</body>
+
+</html>
